@@ -10,6 +10,7 @@ class Post(models.Model):
     slug = models.SlugField()
     #text = models.TextField()
     text = MarkdownxField()
+    price = models.IntegerField(null=True)
     created_datetime = models.DateTimeField(auto_now_add=True)
     updated_datetime = models.DateTimeField(auto_now=True)
     def __str__(self):
