@@ -1,0 +1,18 @@
+{% extends 'blog/base.html' %}
+{% block title %} 僕のブログ／Top Page {% endblock %}
+
+{% block content %}
+  <h1 style="text-align: center;">僕のブログ</h1>
+  
+    <hr />
+    {% for post in posts %}
+    <div>
+      <h3>{{ post.title }}</h3>
+      <div>{{ post.text | truncatechars:100 }}</div>
+      <div style="text-align: right;">
+        <a href="{% url 'post:post_detail' slug=post.slug %}">記事を読む</a>
+      </div>
+    </div>
+    <hr />
+    {% endfor %}
+{% endblock %}
