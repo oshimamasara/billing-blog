@@ -27,3 +27,9 @@ class Post(models.Model):
 def save(self, *args, **kwargs):
     self.slug = slugify(self.title)
     super().save(*args, **kwargs)
+
+class Sell(models.Model):  # Sellsにすると管理画面で Sellss と s が 2つになる
+    sold_blog = models.CharField(blank=False, null=False, max_length=100)
+    customer_mail = models.CharField(blank=False, null=False, max_length=100)
+    Date = models.DateTimeField(auto_now_add=True)
+    price = models.IntegerField(null=True)
