@@ -8,6 +8,8 @@
 {{ post.formatted_markdown|safe |truncatechars:200 }}
 
 <!-- 課金　カード決済 -->
+<div style="width:300px;font-size:0.8em;background-color:#eeeeee;padding-top: 10px;padding-right: 10px;padding-bottom: 10px;padding-left: 10px;">
+<h4>{{ post.price }}円（税込）払って続きを読む</h4>
 <form method="post" id="payment-form">
 {% csrf_token %}
     <div class="form-row inline">
@@ -23,7 +25,7 @@
         <label for="email">
         Email Address
         </label><br>
-        <input id="email" name="input_mail"  type="email" placeholder="〇○@example.com"  size="50" required>
+        <input id="email" name="input_mail"  type="email" placeholder="〇○@example.com"  required>
         <!-- id=は決済用のメール登録に、 name=はDB記録用 -->
     </div>
       <!-- Used to display form errors. -->
@@ -32,7 +34,7 @@
   <br>
   <button>決済する</button>
 </form>
-
+</div>
 <!-- 過去購入履歴のチェック -->
 
 <hr>

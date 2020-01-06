@@ -17,12 +17,14 @@ def index(request):
 
 def fee_detail(request, slug):
     post = get_object_or_404(Post, slug=slug)
+    blog_price = post.price
     #stripe
     stripe.api_key = 'sk_test_L3ocIJYmmqbktHeyfNh9t9I600OpJsBvke'
 
     if request.method == "POST":
         try:
-            amount = 110   # amount in cents
+            #amount = 110   # amount in cents
+            amount = blog_price
             customer = stripe.Customer.create(
                 email="customer@gamil.com",
                 source=request.POST['stripeToken']
@@ -37,7 +39,10 @@ def fee_detail(request, slug):
                 receipt_email="customer@gamil.com",
             )
             print("stripe.Charge.create()     OK!")
-            return HttpResponse("django blog で Stripe決済完了！")
+
+            return render(request, 'blog/paid_detail.html', {'post': post})
+            #return HttpResponse("django blog で Stripe決済完了！")
+
         except stripe.error.StripeError:
             print("error......")
 

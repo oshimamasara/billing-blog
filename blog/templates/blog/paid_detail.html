@@ -1,0 +1,16 @@
+{% extends 'blog/base.html' %}
+{% block title %} {{ post.title }}:僕のブログ {% endblock %}
+{% block content %}
+<p style="color:red">お支払い頂き、ありがとうございました。</p>
+<br>
+<h1>{{ post.title }}</h1>
+{{ post.formatted_markdown|safe }}
+
+<hr>
+<div style="font-size:0.6em">
+作成日： {{ post.created_datetime }}
+<br>
+更新日： {{ post.updated_datetime }}
+</div>
+<hr>
+{% endblock %}
