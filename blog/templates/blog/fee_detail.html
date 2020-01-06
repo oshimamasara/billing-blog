@@ -4,6 +4,15 @@
 {% block stripe-js %}<script src="https://js.stripe.com/v3/"></script>{% endblock %}
 {% block content %}
 <link rel="stylesheet" href="{% static 'css/pay-stripe.css' %}">
+
+{% if pay_status %}
+<p style="color:red">あれっ、カード決済に失敗しました.....</p>
+<br>
+{% elif inputed_email %}
+<p style="color:red">{{ inputed_email }} の購入履歴を確認しましたが、該当はありませんでした.</p>
+<br>
+{% endif %}
+
 <h1>{{ post.title }}</h1>
 {{ post.formatted_markdown|safe |truncatechars:200 }}
 
@@ -35,9 +44,28 @@
   <button>決済する</button>
 </form>
 </div>
+<hr>
+<hr>
+
+{% if inputed_email %}
+<!-- チェック欄は重複するので非表示に -->
+{% else %}
 <!-- 過去購入履歴のチェック -->
+<div style="width:300px;font-size:0.8em;background-color:#d5fff2;padding-top: 10px;padding-right: 10px;padding-bottom: 10px;padding-left: 10px;">
+<h4>購入履歴の確認</h4>
+<form action="{% url 'post:purchased_check' post.slug%}" method="post">
+{% csrf_token %}
+<label for="check_mail">
+メールアドレスをご入力ください
+</label><br>
+<input id="email" name="check_mail"  type="email" placeholder="〇○@example.com"  required>
+<button type="submit">確認する</button>
+</form>
+</div>
 
 <hr>
+<hr>
+{% endif %}
 <div style="font-size:0.6em">
 作成日： {{ post.created_datetime }}
 <br>

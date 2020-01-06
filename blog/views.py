@@ -57,7 +57,9 @@ def fee_detail(request, slug):
                 return render(request, 'blog/paid_detail.html', {'post': post})
             else:
                 # カード決済失敗時、決済付き画面に
-                return render(request, 'blog/pay_error_detail.html', {'post': post})
+                #return render(request, 'blog/pay_error_detail.html', {'post': post})
+                pay_status = paied["status"]
+                return render(request, 'blog/fee_detail.html', {'post': post,  'pay_status':pay_status})
 
                 #return render(request, 'blog/paid_detail.html', {'post': post})
                 #return HttpResponse("django blog で Stripe決済完了！")
@@ -74,3 +76,19 @@ def fee_detail(request, slug):
     #post = get_object_or_404(Post, slug=slug)
     #return render(request, 'blog/fee_detail.html', {'post':post})
 
+def purchased_check(request, slug):
+    post = get_object_or_404(Post, slug=slug)
+
+    inputed_email = request.POST['check_mail']
+    user_check_buy_blog = post
+    db_mail = Sell.objects.filter(customer_mail = inputed_email) #このメアドの購入履歴の有無を確認できる
+    db_blog = Sell.objects.filter(sold_blog = user_check_buy_blog) #この記事が売れた数
+    print(db_mail)
+    print(db_blog)
+
+    if db_mail and db_blog:
+        #return HttpResponse("買ったことあるね")
+        return render(request, 'blog/detail.html', {'post': post, 'inputed_email':inputed_email})
+    else:
+        #return HttpResponse("まだ買ってないね")
+        return render(request, 'blog/fee_detail.html', {'post': post, 'inputed_email':inputed_email})

@@ -1,6 +1,11 @@
 {% extends 'blog/base.html' %}
 {% block title %} {{ post.title }}:僕のブログ {% endblock %}
 {% block content %}
+
+{% if inputed_email %}
+<p style="color:green">{{ inputed_email }}様は過去に当記事をご購入いただいています.</p>
+<br>
+{% endif %}
 <h1>{{ post.title }}</h1>
 {{ post.formatted_markdown|safe }}
 
