@@ -2,12 +2,7 @@
 {% block title %} {{ post.title }}:僕のブログ {% endblock %}
 {% block content %}
 <h1>{{ post.title }}</h1>
-{{ post.formatted_markdown|safe |truncatechars:200 }}
-
-<!-- 課金　カード決済 -->
-
-
-<!-- 過去購入履歴のチェック -->
+{{ post.formatted_markdown|safe }}
 
 <hr>
 <div style="font-size:0.6em">
