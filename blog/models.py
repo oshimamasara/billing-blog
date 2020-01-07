@@ -20,7 +20,8 @@ class Post(models.Model):
         return markdownify(self.text)
 
     def get_absolute_url(self):
-        return reverse('post:post_detail',
+#        return reverse('post:post_detail',
+        return reverse('post:fee_detail',
                    args=[str(self.slug)])
 
 # to save slug

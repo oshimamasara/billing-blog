@@ -2,17 +2,30 @@
 {% block title %} 僕のブログ／Top Page {% endblock %}
 
 {% block content %}
-  <h1 style="text-align: center;">僕のブログ</h1>
-  
-    <hr />
-    {% for post in posts %}
-    <div>
-      <h3>{{ post.title }}</h3>
-      <div>{{ post.text | truncatechars:100 }}</div>
-      <div style="text-align: right;">
-        <a href="{% url 'post:fee_detail' slug=post.slug %}">記事を読む</a>
-      </div>
-    </div>
-    <hr />
-    {% endfor %}
+    <h1 style="text-align: center;">僕のブログ</h1>
+
+        <hr />
+        {% for post in posts %}
+        <div>
+            <h3>{{ post.title }}</h3>
+            <div>{{ post.text | truncatechars:100 }}</div>
+            <div style="text-align: right;">
+                <a href="{% url 'post:fee_detail' slug=post.slug %}">記事を読む</a>
+            </div>
+        </div>
+        <hr />
+        {% endfor %}
+
+        <!-- 購入履歴の確認フォーム -->
+        <hr>
+        <p>全購入履歴の確認</p>
+        <form action="{% url 'post:check_history' %}" method="post">
+            {% csrf_token %}
+            <label for="check_history_mail">
+                メールアドレスをご入力ください
+            </label><br>
+            <input id="email" name="check_history_mail"  type="email" placeholder="〇○@example.com"  required>
+            <button type="submit">確認する</button>
+        </form>
+        <hr>
 {% endblock %}

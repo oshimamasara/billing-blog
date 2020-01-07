@@ -76,6 +76,7 @@ def fee_detail(request, slug):
     #post = get_object_or_404(Post, slug=slug)
     #return render(request, 'blog/fee_detail.html', {'post':post})
 
+# この記事買ったっけ？を確認するコード
 def purchased_check(request, slug):
     post = get_object_or_404(Post, slug=slug)
 
@@ -92,3 +93,20 @@ def purchased_check(request, slug):
     else:
         #return HttpResponse("まだ買ってないね")
         return render(request, 'blog/fee_detail.html', {'post': post, 'inputed_email':inputed_email})
+
+
+# 購入リストを表示
+def check_history(request):
+    check_email = request.POST['check_history_mail']
+    db_user_data = Sell.objects.filter(customer_mail = check_email)#購入履歴の有無を確認できる
+    return render(request, 'blog/purchased_check.html', {'db_user_data':db_user_data, 'input_mail':check_email})
+    #print("----db_user_data")
+    #print("----check_email" + check_email)
+    #print(db_user_data)
+    #for data in db_user_data:
+    #    print(data.sold_blog)
+#
+    #if db_user_data:
+    #    return HttpResponse("買ったことあるね")
+    #else:
+    #    return HttpResponse("まだ買ってないね")

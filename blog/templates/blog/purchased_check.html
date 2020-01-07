@@ -1,0 +1,24 @@
+{% extends 'blog/base.html' %}
+{% block title %} {{ post.title }}:僕のブログ {% endblock %}
+{% block content %}
+    {% if db_user_data %}
+        <h2 style="text-align: center;">{{input_mail}} 様の購入履歴</h2>
+            <table>
+            <tr>
+                <td>日付</td>
+                <td>記事</td>
+                <td>価格</td>
+            </tr>
+            {% for data in db_user_data %}
+            <tr>
+                <td>{{ data.Date }}</td>
+                <td>{{ data.sold_blog }}</td>
+                <td>{{ data.price }}</td>
+            </tr>
+            {% endfor %}
+            </table>
+          <hr>
+    {% else %}
+        <p> {{ input_mail }} 様の購入履歴はありません。</p>
+    {% endif %}
+{% endblock %}
