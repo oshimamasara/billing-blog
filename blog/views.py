@@ -20,57 +20,61 @@ def fee_detail(request, slug):
     post = get_object_or_404(Post, slug=slug)
     blog_price = post.price
     #stripe
-    stripe.api_key = 'sk_test_L3ocIJYmmqbktHeyfNh9t9I600OpJsBvke'
+    if blog_price > 0:
+        stripe.api_key = 'sk_test_L3ocIJYmmqbktHeyfNh9t9I600OpJsBvke'
 
-    if request.method == "POST":
-        try:
-            user_email = request.POST['input_mail']
-            #amount = 110   # amount in cents
-            amount = blog_price
-            customer = stripe.Customer.create(
-                email = user_email,
-                #email="customer@gamil.com",
-                source=request.POST['stripeToken']
-            )
-            print("stripe.Customer.create()     OK!")
+        if request.method == "POST":
+            try:
+                user_email = request.POST['input_mail']
+                #amount = 110   # amount in cents
+                amount = blog_price
+                customer = stripe.Customer.create(
+                    email = user_email,
+                    #email="customer@gamil.com",
+                    source=request.POST['stripeToken']
+                )
+                print("stripe.Customer.create()     OK!")
 
-            paied = stripe.Charge.create(
-                customer=customer.id,
-                amount=amount,
-                currency='jpy',
-                description='ブログのdjangoでStripe中....',
-                receipt_email=user_email,
-            )
-            print("stripe.Charge.create()     OK!")
+                paied = stripe.Charge.create(
+                    customer=customer.id,
+                    amount=amount,
+                    currency='jpy',
+                    description='ブログのdjangoでStripe中....',
+                    receipt_email=user_email,
+                )
+                print("stripe.Charge.create()     OK!")
 
-            # SAVA DATABASE
-            #print(paied)
-            #print(paied.keys())
-            #print(paied["status"])
-            if paied["status"]=="succeeded":
-                sells_data = Sell()
-                sells_data.sold_blog = post
-                sells_data.customer_mail = user_email
-                sells_data.Date = timezone.now()
-                sells_data.price = amount
-                sells_data.save()
-                return render(request, 'blog/paid_detail.html', {'post': post})
-            else:
-                # カード決済失敗時、決済付き画面に
-                #return render(request, 'blog/pay_error_detail.html', {'post': post})
-                pay_status = paied["status"]
-                return render(request, 'blog/fee_detail.html', {'post': post,  'pay_status':pay_status})
+                # SAVA DATABASE
+                #print(paied)
+                #print(paied.keys())
+                #print(paied["status"])
+                if paied["status"]=="succeeded":
+                    sells_data = Sell()
+                    sells_data.sold_blog = post
+                    sells_data.customer_mail = user_email
+                    sells_data.Date = timezone.now()
+                    sells_data.price = amount
+                    sells_data.save()
+                    return render(request, 'blog/paid_detail.html', {'post': post})
+                else:
+                    # カード決済失敗時、決済付き画面に
+                    #return render(request, 'blog/pay_error_detail.html', {'post': post})
+                    pay_status = paied["status"]
+                    return render(request, 'blog/fee_detail.html', {'post': post,  'pay_status':pay_status})
 
-                #return render(request, 'blog/paid_detail.html', {'post': post})
-                #return HttpResponse("django blog で Stripe決済完了！")
+                    #return render(request, 'blog/paid_detail.html', {'post': post})
+                    #return HttpResponse("django blog で Stripe決済完了！")
 
-        except stripe.error.StripeError:
-            print("error......")
+            except stripe.error.StripeError:
+                print("error......")
 
+        else:
+            sample_text = "Stripe上手くいくかな....."
+
+        return render(request, 'blog/fee_detail.html', {'post': post})
+    
     else:
-        sample_text = "Stripe上手くいくかな....."
-
-    return render(request, 'blog/fee_detail.html', {'post': post})
+        return render(request, 'blog/detail.html', {'post':post}) # 0円記事のパターン
 
     # first code
     #post = get_object_or_404(Post, slug=slug)
