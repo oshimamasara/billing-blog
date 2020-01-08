@@ -39,7 +39,8 @@ def fee_detail(request, slug):
                     customer=customer.id,
                     amount=amount,
                     currency='jpy',
-                    description='ブログのdjangoでStripe中....',
+                    description = post.title,
+                    #description='ブログのdjangoでStripe中....',
                     receipt_email=user_email,
                 )
                 print("stripe.Charge.create()     OK!")
